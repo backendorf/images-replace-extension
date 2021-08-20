@@ -1,0 +1,29 @@
+{
+  "value_updated": {
+    "message": "Value updated!"
+  },
+  "replace_time_required": {
+    "message": "Replace Time is required!"
+  },
+  "replace_url_required": {
+    "message": "Replace URL is required!"
+  },
+  "replacing": {
+    "message": "Replacing..."
+  },
+  "images_updated": {
+    "message": " images updated!"
+  },
+  "lbl_enabled": {
+    "message": "Enabled"
+  },
+  "lbl_replace_url": {
+    "message": "Replace URL"
+  },
+  "lbl_replace_time": {
+    "message": "Replace Time (ms)"
+  },
+  "lbl_only_404": {
+    "message": "Replace Only 404"
+  }
+}
