@@ -25,5 +25,8 @@
   },
   "lbl_only_404": {
     "message": "Replace Only 404"
+  },
+  "lbl_mc_hash": {
+    "message": "Origin media content hash"
   }
 }

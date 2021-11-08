@@ -2,7 +2,7 @@
 <html>
 <head>
     <title>Images Replace Configs</title>
-    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="../css/style.css">
 </head>
 <body>
     <div class="popup">
@@ -25,12 +25,16 @@
             <input type="url" id="replace_url">
         </div>
         <div class="config-item">
-            <label for="replaceTime" id="lbl_replace_time"></label>
-            <input type="number" id="replaceTime" value="4000">
+            <label for="mc_hash" id="lbl_mc_hash"></label>
+            <input type="text" id="mc_hash">
+        </div>
+        <div class="config-item">
+            <label for="replace_time" id="lbl_replace_time"></label>
+            <input type="number" id="replace_time" value="4000">
         </div>
 
         <span id="msg"></span>
     </div>
-    <script src="js/popup.js"></script>
+    <script src="../js/popup.js"></script>
 </body>
 </html>

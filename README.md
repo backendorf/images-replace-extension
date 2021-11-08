@@ -1,2 +1,2 @@
 # images-replace-extension
-Reload images from alternative domain.
+Magento 2 tool to reload images from alternative domain.
