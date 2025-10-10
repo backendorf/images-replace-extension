@@ -1,10 +1,32 @@
-#img-relace-notify {
+#img-replace-notify {
     color: white;
     background-color: black;
     position: fixed;
-    bottom: 20px;
-    left: 20px;
-    padding: 12px;
-    font-weight: bold;
-    border-radius: 10px;
+    bottom: 24px;
+    left: 24px;
+    padding: 8px 12px;
+    font-weight: 600;
+    border-radius: 4px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    animation-name: toast-pulse-intenso;
+    animation-duration: 0.7s;
+    animation-iteration-count: 1;
+    animation-timing-function: cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    animation-fill-mode: forwards;
+}
+
+@keyframes toast-pulse-intenso {
+    0% {
+        transform: scale(1);
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+    }
+    50% {
+        transform: scale(1.05);
+        box-shadow: 0 15px 30px rgba(0, 0, 0, 0.5), 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    100% {
+        transform: scale(1);
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+    }
 }

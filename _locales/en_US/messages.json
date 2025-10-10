@@ -2,31 +2,19 @@
   "value_updated": {
     "message": "Value updated!"
   },
-  "replace_time_required": {
-    "message": "Replace Time is required!"
-  },
   "replace_url_required": {
-    "message": "Replace URL is required!"
+    "message": "A valid URL is required!"
   },
   "replacing": {
     "message": "Replacing..."
   },
-  "images_updated": {
-    "message": " images updated!"
+  "images_replaced": {
+    "message": " images replaced!"
   },
   "lbl_enabled": {
     "message": "Enabled"
   },
   "lbl_replace_url": {
     "message": "Replace URL"
-  },
-  "lbl_replace_time": {
-    "message": "Replace Time (ms)"
-  },
-  "lbl_only_404": {
-    "message": "Replace Only 404"
-  },
-  "lbl_mc_hash": {
-    "message": "Origin media content hash"
   }
 }

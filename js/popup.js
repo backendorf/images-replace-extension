@@ -1,84 +1,102 @@
 "use strict";
+let timeoutId = null;
 
 function message(msg, isError = false) {
-    document.getElementById("msg").style.visibility = 'visible';
-    if (isError) {
-        document.getElementById("msg").style.backgroundColor = '#f8d7da';
-        document.getElementById("msg").style.color = '#721c24';
-    } else {
-        document.getElementById("msg").style.backgroundColor = '#d4edda';
-        document.getElementById("msg").style.color = '#155724';
+    const messageElement = document.getElementById("msg");
+    if (timeoutId) {
+        clearTimeout(timeoutId);
     }
-    document.getElementById("msg").innerText = msg;
-    setTimeout(function () {
-            document.getElementById("msg").innerText = ''
-            document.getElementById("msg").style.visibility = 'hidden';
-        }, 2000
-    );
+    messageElement.classList.remove('error', 'success');
+    if (isError) {
+        messageElement.classList.add('error');
+    } else {
+        messageElement.classList.add('success');
+    }
+
+    messageElement.innerText = msg;
+
+    timeoutId = setTimeout(() => {
+        messageElement.classList.remove('error', 'success');
+        messageElement.innerText = '';
+        timeoutId = null;
+    }, 10000);
 }
 
-function save() {
-    if (document.getElementById("replace_url").value === '') {
+function isValidUrl(url) {
+    try {
+        new URL(url);
+        return true;
+    } catch (e) {
+        return false;
+    }
+}
+
+async function handleToggleAndSave() {
+    const urlInput = document.getElementById("replace_url");
+    const enabledCheckbox = document.getElementById("enabled");
+    const urlValue = urlInput.value.trim();
+
+    if (urlValue === '' || !isValidUrl(urlValue)) {
         message(chrome.i18n.getMessage("replace_url_required"), true);
-        return false;
+        return;
     }
 
-    if (document.getElementById("replace_time").value === '') {
-        message(chrome.i18n.getMessage("replace_time_required"), true);
-        return false;
-    }
+    try {
+        const tabs = await chrome.tabs.query({active: true, currentWindow: true});
+        const currentTab = tabs[0];
 
-    chrome.tabs.query({active: true, currentWindow: true}, function (tabs) {
-        let hostname = new URL(tabs[0].url).origin + '/';
-        chrome.storage.sync.set({
-            enabled: document.getElementById("enabled").checked,
-            only_404: document.getElementById("only_404").checked,
-            replace_url: document.getElementById("replace_url").value,
-            replace_time: document.getElementById("replace_time").value,
-            mc_hash: document.getElementById("mc_hash").value,
+        if (!currentTab || !currentTab.url) {
+            return;
+        }
+
+        const hostname = new URL(currentTab.url).origin + '/';
+        const isEnabled = enabledCheckbox.checked;
+
+        await chrome.storage.sync.set({
+            enabled: isEnabled,
+            replace_url: urlValue,
             hostname: hostname
-        }, function () {
-            message(chrome.i18n.getMessage("value_updated"));
-
-            chrome.tabs.query({active: true, currentWindow: true}, function (tabs) {
-                chrome.tabs.update(tabs[0].id, {url: tabs[0].url});
-            });
         });
-    });
+
+        if (isEnabled) {
+            message(chrome.i18n.getMessage("value_updated"));
+            await chrome.tabs.update(currentTab.id, {url: currentTab.url});
+        }
+
+    } catch (error) {
+        message(error, true);
+    }
 }
 
 function restore() {
-    chrome.storage.sync.get([
-        'enabled',
-        'only_404',
-        'replace_url',
-        'replace_time',
-        'mc_hash'
-    ], function (data) {
-        document.getElementById("enabled").checked = data.enabled;
-        document.getElementById("only_404").checked = data.only_404;
-        document.getElementById("replace_url").value = data.replace_url;
-        document.getElementById("replace_time").value = data.replace_time;
-        document.getElementById("mc_hash").value = data.mc_hash;
+    chrome.storage.sync.get(['enabled', 'replace_url'], (data) => {
+        const replaceUrlInput = document.getElementById("replace_url");
+
+        document.getElementById("enabled").checked = data.enabled || false;
+        replaceUrlInput.value = data.replace_url || '';
+
+        if (replaceUrlInput.value === '') {
+            replaceUrlInput.focus();
+        }
     });
 }
 
 function init() {
+    document.getElementById("enabled").addEventListener("click", handleToggleAndSave);
+    document.getElementById("replace_url").addEventListener("focusout", handleToggleAndSave);
+
     restore();
     renderPopupMessages();
 }
 
 function renderPopupMessages() {
-    document.getElementById("lbl_enabled").innerHTML = chrome.i18n.getMessage('lbl_enabled');
-    document.getElementById("lbl_replace_url").innerHTML = chrome.i18n.getMessage('lbl_replace_url');
-    document.getElementById("lbl_replace_time").innerHTML = chrome.i18n.getMessage('lbl_replace_time');
-    document.getElementById("lbl_only_404").innerHTML = chrome.i18n.getMessage('lbl_only_404');
-    document.getElementById("lbl_mc_hash").innerHTML = chrome.i18n.getMessage('lbl_mc_hash');
+    const elements = ['lbl_enabled', 'lbl_replace_url'];
+    elements.forEach(id => {
+        const element = document.getElementById(id);
+        if (element) {
+            element.innerHTML = chrome.i18n.getMessage(id);
+        }
+    });
 }
 
 document.addEventListener("DOMContentLoaded", init);
-document.getElementById("enabled").addEventListener("click", save);
-document.getElementById("replace_url").addEventListener("focusout", save);
-document.getElementById("replace_time").addEventListener("focusout", save);
-document.getElementById("mc_hash").addEventListener("focusout", save);
-document.getElementById("only_404").addEventListener("click", save);

@@ -1,0 +1,169 @@
+:root {
+    --primary-color: #6a6ee0;
+    --border-radius: 8px;
+    --transition-speed: 0.8s;
+    --box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+
+    color-scheme: light dark;
+    --text-color: CanvasText;
+    --background-color: Canvas;
+    --card-background-color: #fff;
+    --input-background-color: #f9f9f9;
+    --border-color: #ddd;
+    --slider-before-color: #fff;
+    --slider-background-off: #ccc;
+    --slider-background-on: #4CAF50;
+}
+
+@media (prefers-color-scheme: dark) {
+    :root {
+        --text-color: CanvasText;
+        --background-color: Canvas;
+        --card-background-color: #2e2e2e;
+        --input-background-color: #3b3b3b;
+        --border-color: #555;
+        --slider-before-color: #2e2e2e;
+        --slider-background-off: #555;
+        --slider-background-on: #4CAF50;
+    }
+}
+
+body {
+    font-family: 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+    color: var(--text-color);
+    background-color: var(--background-color);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 16px;
+}
+
+.popup {
+    min-width: 280px;
+    padding: 24px;
+    font-size: 1.125rem;
+    background-color: var(--card-background-color);
+    border-radius: var(--border-radius);
+    box-shadow: var(--box-shadow);
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    border: 1px solid var(--border-color);
+}
+
+#msg {
+    width: 100%;
+    text-align: center;
+    font-size: 16px;
+    line-height: 20px;
+    font-weight: 600;
+    border-radius: var(--border-radius);
+    visibility: hidden;
+    opacity: 0;
+    transition: opacity var(--transition-speed) ease-in-out;
+    padding: 8px;
+    border: 1px solid var(--border-color);
+    box-sizing: border-box;
+    height: 0;
+}
+
+#msg:where(.success, .error) {
+    opacity: 1;
+    visibility: visible;
+    height: auto;
+}
+
+#msg.success {
+    color: #008000;
+    border-color: #008000;
+}
+
+#msg.error {
+    color: #FF0000;
+    border-color: #FF0000;
+}
+
+.popup .field-group {
+    margin-bottom: 16px;
+}
+
+.popup label {
+    margin-bottom: 8px;
+    display: block;
+    font-weight: 500;
+}
+
+.popup .toggle {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+}
+
+.popup input[type="text"],
+.popup input[type="email"],
+.popup input:not([type="checkbox"]):not([type="radio"]) {
+    height: 44px;
+    border-radius: var(--border-radius);
+    border: 1px solid var(--border-color);
+    background-color: var(--input-background-color);
+    color: var(--text-color);
+    width: 100%;
+    padding: 0 16px;
+    transition: border-color var(--transition-speed), box-shadow var(--transition-speed);
+    box-sizing: border-box;
+}
+
+.popup input:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--primary-color) 30%, transparent);
+}
+
+.popup input[type="checkbox"] {
+    opacity: 0;
+    width: 0;
+    height: 0;
+    position: absolute;
+}
+
+.popup .switch:has(input[type="checkbox"]:checked) .slider.round {
+    background-color: var(--slider-background-on);
+}
+
+.popup .switch:has(input[type="checkbox"]:checked) .slider.round::before {
+    left: initial;
+    right: 4px;
+}
+
+.popup .toggle label {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    font-weight: 500;
+}
+
+.popup .slider {
+    position: relative;
+    display: inline-block;
+    width: 60px;
+    min-width: 60px;
+    height: 34px;
+    background-color: var(--slider-background-off);
+    border-radius: 34px;
+    transition: background-color var(--transition-speed);
+    margin-left: 10px;
+}
+
+.popup .slider:before {
+    content: "";
+    position: absolute;
+    height: 26px;
+    width: 26px;
+    left: 4px;
+    bottom: 4px;
+    background-color: var(--slider-before-color);
+    border-radius: 50%;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: all var(--transition-speed) ease-in-out;
+}
