@@ -85,6 +85,7 @@ Notes:
 ## Privacy and Permissions
 - The extension stores its settings using chrome.storage.sync.
 - The content script runs on all pages (<all_urls>) but is a no-op unless you explicitly enable it for the site (the origin must match the stored hostname).
+- See PRIVACY.md for the full privacy policy.
 
 ## Publishing
 - TODO: Add instructions for packaging and publishing to the Chrome Web Store if distribution is desired.
